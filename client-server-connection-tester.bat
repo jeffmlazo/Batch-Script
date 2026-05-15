@@ -1,33 +1,3 @@
-::@ECHO OFF
-::SETLOCAL ENABLEDELAYEDEXPANSION
-
-:: Get connection-specific DNS suffix (domain)
-::for /F "tokens=2 delims=:" %%a in ('systeminfo ^| findstr /c:"Domain"') do (
-::	set "DOMAIN=%%a"
-::	echo "DOMAIN=!"
-::)
-
-:: START find & display domain name ==========================
-::set "DOMAIN=%DOMAIN: =%"
-::echo Fetching domain name = %DOMAIN%
-::findstr /c:"Domain"
-::systeminfo | findstr /c:"Domain"
-::echo Domain: %domain%
-:: END find & display domain name ==========================
-
-:: START Get server IP address ==========================
-:: set "DOMAIN-NAME=SGS.com"
-
-::for /F "tokens=2 delims=:" %%a in ('nslookup %DOMAIN-NAME% ^| findstr /c:"Address:" ^| findstr /v "#"') do (
-::	set "SERVER-IP=%%a"
-::	set "SERVER-IP=!SERVER-IP: =!"
-::	goto :found
-::)
-:: :found
-
-:: echo Server IP: %SERVER-IP%
-:: END Get server IP address ==========================
-
 @ECHO OFF
 SETLOCAL ENABLEDELAYEDEXPANSION
 
