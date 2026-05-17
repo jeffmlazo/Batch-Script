@@ -2,6 +2,7 @@
 SETLOCAL ENABLEDELAYEDEXPANSION
 
 :RETRY_TESTER
+ECHO.
 ECHO ============================================
 ECHO = START CLIENT ^& SERVER CONNECTION TESTER =
 ECHO ============================================
@@ -30,8 +31,6 @@ IF "!ROLE!"=="1" GOTO FETCH_CLIENT
 IF "!ROLE!"=="2" GOTO FETCH_SERVER
 
 :FETCH_CLIENT
-ECHO ================================
-ECHO Fetching server domain...
 FOR /F "tokens=2 delims=:" %%a IN ('systeminfo ^| findstr /c:"Domain"') DO (
     SET "DOMAIN=%%a"
     SET "DOMAIN=!DOMAIN: =!"
@@ -39,9 +38,6 @@ FOR /F "tokens=2 delims=:" %%a IN ('systeminfo ^| findstr /c:"Domain"') DO (
 )
 
 :FOUND_DOMAIN
-ECHO ================================
-ECHO ================================
-ECHO Fetching server IP address...
 FOR /F "tokens=2 delims=:" %%a IN ('nslookup !DOMAIN! ^| findstr /c:"Address:" ^| findstr /v "#"') DO (
     SET "SERVER_IP=%%a"
     SET "SERVER_IP=!SERVER_IP: =!"
@@ -50,10 +46,20 @@ FOR /F "tokens=2 delims=:" %%a IN ('nslookup !DOMAIN! ^| findstr /c:"Address:" ^
 
 :FOUND_SERVER_IP
 ECHO ================================
+ECHO Connecting to server using domain name [!DOMAIN!]...
+NSLOOKUP !DOMAIN!
+ECHO ================================
+
+ECHO ================================
+ECHO Connecting to server using IP address [!SERVER_IP!]...
+NSLOOKUP !SERVER_IP!
+ECHO ================================
+
 SET TARGET_IP=!SERVER_IP!
 GOTO CHECK_IP
 
 :FETCH_SERVER
+ECHO.
 SET /P TARGET_IP="Enter target IP address: "
 
 :CHECK_IP
@@ -63,9 +69,14 @@ IF "!TARGET_IP!"=="" (
     GOTO RETRY_PING
 )
 
+ECHO.
+ECHO ================================
+ECHO Pinging IP address...
 :: Pinging IP address
 PING !TARGET_IP!
+ECHO ================================
 
+ECHO.
 SET /P IS_RETRY_PING="Do you want to retry ping again? [Y/N]: "
 IF /I "!IS_RETRY_PING!"=="Y" GOTO RETRY_PING
 IF /I "!IS_RETRY_PING!"=="N" GOTO END_APP
